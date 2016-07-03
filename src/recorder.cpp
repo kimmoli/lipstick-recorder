@@ -27,9 +27,12 @@
 #include <QThread>
 #include <QMutexLocker>
 #include <QElapsedTimer>
+#include <QBuffer>
+#include <QQueue>
 
 #include "wayland-lipstick-recorder-client-protocol.h"
 #include "recorder.h"
+#include "screenprovider.h"
 
 class Buffer
 {
@@ -114,11 +117,21 @@ public:
                 rec->recordFrame();
             QString filename = QString("frame%1.jpg").arg(id++, 3, 10, QChar('0'));
             qDebug("saving %s.", qPrintable(filename));
-            img.save(filename);
+            QByteArray ba;
+            QBuffer imgBuffer;
+            imgBuffer.setBuffer(&ba);
+            imgBuffer.open(QIODevice::WriteOnly);
+            //img.save(filename);
+            img.save(&imgBuffer, "JPG");
+            queue->enqueue(ba);
+            imgBuffer.close();
+
             return true;
         }
         return QObject::event(e);
     }
+
+    QQueue<QByteArray> *queue;
 
     Recorder *rec;
 };
@@ -151,11 +164,14 @@ Recorder::Recorder()
     };
     wl_callback_add_listener(cb, &callbackListener, this);
 
+    m_screenProvider = new ScreenProvider;
     m_buffersThread = new QThread;
     m_buffersHandler = new BuffersHandler;
     m_buffersHandler->rec = this;
+    m_buffersHandler->queue = &m_screenProvider->queue_;
     m_buffersHandler->moveToThread(m_buffersThread);
     m_buffersThread->start();
+    m_screenProvider->start();
 }
 
 Recorder::~Recorder()
@@ -274,3 +290,4 @@ void Recorder::globalRemove(void *data, wl_registry *registry, uint32_t id)
     Q_UNUSED(registry)
     Q_UNUSED(id)
 }
+

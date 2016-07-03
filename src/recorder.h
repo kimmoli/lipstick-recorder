@@ -19,6 +19,9 @@
 #include <QObject>
 #include <QMutex>
 #include <wayland-client.h>
+#include "screenprovider.h"
+
+void streamLoop(qintptr socketDesc, QQueue<QByteArray> &queue, bool& streaming);
 
 class QScreen;
 
@@ -60,6 +63,7 @@ private:
     QThread *m_buffersThread;
     BuffersHandler *m_buffersHandler;
     QMutex m_mutex;
+    ScreenProvider *m_screenProvider;
 
     friend class BuffersHandler;
 };

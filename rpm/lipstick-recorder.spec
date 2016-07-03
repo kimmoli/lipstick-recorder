@@ -1,5 +1,11 @@
 Name:       lipstick-recorder
 
+%{!?qtc_qmake:%define qtc_qmake %qmake}
+%{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
+%{!?qtc_make:%define qtc_make make}
+%{?qtc_builddir:%define _builddir %qtc_builddir}
+
+
 Summary:    Lipstick recorder client
 Version:    0.0.1
 Release:    1
@@ -14,6 +20,7 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5PlatformSupport)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  qt5-qtwayland-wayland_egl-devel
+BuildRequires:  qt5-qtconcurrent-devel
 
 %description
 Lipstick recorder client
@@ -22,8 +29,8 @@ Lipstick recorder client
 %setup -q -n %{name}-%{version}
 
 %build
-%qmake5
-make %{_smp_mflags}
+%qtc_qmake5
+%qtc_make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
