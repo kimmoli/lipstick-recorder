@@ -112,7 +112,7 @@ public:
             buf->busy = false;
             if (rec->m_starving)
                 rec->recordFrame();
-            QString filename = QString("frame%1.bmp").arg(id++, 3, 10, QChar('0'));
+            QString filename = QString("frame%1.jpg").arg(id++, 3, 10, QChar('0'));
             qDebug("saving %s.", qPrintable(filename));
             img.save(filename);
             return true;
