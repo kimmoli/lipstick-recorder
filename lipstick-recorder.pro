@@ -6,7 +6,7 @@ target.path += /usr/bin
 INSTALLS += target
 
 CONFIG += wayland-scanner link_pkgconfig c++11
-QT += platformsupport-private network
+QT += gui-private network
 PKGCONFIG += wayland-client
 WAYLANDCLIENTSOURCES += protocol/lipstick-recorder.xml
 

@@ -17,7 +17,6 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5PlatformSupport)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  qt5-qtwayland-wayland_egl-devel
 BuildRequires:  qt5-qtconcurrent-devel
